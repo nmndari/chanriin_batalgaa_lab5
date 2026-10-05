@@ -36,3 +36,23 @@
 | 8 | Хязгаар: урьдач нөхцөл заримыг нь үзсэн | `B231234567` | `CS402` | идэвхтэй, хангахгүй, байгаа, заримыг нь үзсэн | 200 | `ERROR_PREREQUISITES` (`missing: ["CS202"]`) |
 | 9 | Хязгаар: урьдач нөхцөлгүй хичээл, хоосон `coursesTaken` | `B230000003` | `CS101` | идэвхтэй, хангана, байгаа | 201 | `OK` |
 | 10 | Хязгаар: `courseID` талбар дутуу | `B231234567` | — | талбар дутуу | 400 | `ERROR_BAD_REQUEST` |
+
+## Даалгавар 4: Newman-аар автоматжуулах
+
+Ажиллуулсан команд (`lab05/` хавтас дотроос, bash):
+
+```bash
+mkdir -p results
+newman run lab05-collection.json 2>&1 | tee results/newman-pass.txt
+echo "exit=${PIPESTATUS[0]}"
+```
+
+| Тохиолдол | Collection | Үр дүнгийн файл | requests (executed / failed) | assertions (executed / failed) | Exit code |
+|---|---|---|---|---|---|
+| PASS | `lab05-collection.json` | `results/newman-pass.txt` | 27 / 0 | 42 / 0 | 0 |
+| FAIL | `lab05-collection-fail.json` | `results/newman-fail.txt` | 27 / 0 | 42 / 1 | 1 |
+| DOWN | `lab05-collection.json` (сервер унтраалттай) | `results/newman-down.txt` | 27 / 27 | 42 / 42 | 1 |
+
+- **Тестийн тоо:** 42 (assertions executed).
+- **FAIL:** `lab05-collection-fail.json`-д спецификаци #1-ийн статусын oracle-ийг зориуд буруу болгосон (201-ийг 200 гэж хүлээсэн) — `expected response to have status code 200 but got 201`. Exit code 1 нь CI quality gate-д build-ийг зогсооно. Үндсэн `lab05-collection.json` зөв хэвээр.
+- **DOWN:** Сервер унтраалттай үед гаралтад `connect ECONNREFUSED 127.0.0.1:3000` гарна. Энэ бол интерфейсийн алдаа — хүсэлт серверт огт хүрээгүй (холболтгүй) тул хариу ирээгүй, харин oracle-ийн алдаа бол сервер хариулсан ч хариу нь хүлээгдэж буй утгатай таарахгүй байх явдал юм.
