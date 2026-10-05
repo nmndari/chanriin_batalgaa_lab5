@@ -56,3 +56,18 @@ echo "exit=${PIPESTATUS[0]}"
 - **Тестийн тоо:** 42 (assertions executed).
 - **FAIL:** `lab05-collection-fail.json`-д спецификаци #1-ийн статусын oracle-ийг зориуд буруу болгосон (201-ийг 200 гэж хүлээсэн) — `expected response to have status code 200 but got 201`. Exit code 1 нь CI quality gate-д build-ийг зогсооно. Үндсэн `lab05-collection.json` зөв хэвээр.
 - **DOWN:** Сервер унтраалттай үед гаралтад `connect ECONNREFUSED 127.0.0.1:3000` гарна. Энэ бол интерфейсийн алдаа — хүсэлт серверт огт хүрээгүй (холболтгүй) тул хариу ирээгүй, харин oracle-ийн алдаа бол сервер хариулсан ч хариу нь хүлээгдэж буй утгатай таарахгүй байх явдал юм.
+
+
+## Даалгавар 5 (нэмэлт): Нийтийн API
+
+`GET https://jsonplaceholder.typicode.com/users` — тусдаа collection: `lab05-public-collection.json`, гаралт: `results/newman-public.txt`.
+
+| # | Oracle | Үр дүн |
+|---|---|---|
+| 1 | Статус 200 | PASS |
+| 2 | Хариу нь массив | PASS |
+| 3 | Эхний хэрэглэгчийн нэр `Leanne Graham` | PASS |
+
+assertions: 3 executed / 0 failed, exit code 0.
+
+**Харьцуулалт:** GET-only учраас setup хийх, тестийг бие даасан болгох шаардлагагүй тул хялбар байсан ч, өгөгдлийг бид удирддаггүй (сервер өөрчлөгдвөл эсвэл интернэтгүй бол тест унана) тул хүлээгдэх утгыг өөрсдөө тогтоож чадахгүй нь хэцүү тал юм.
